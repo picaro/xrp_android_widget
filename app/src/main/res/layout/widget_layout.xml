@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/widget_button"
+    android:gravity="center"
+    android:background="#ff000000"
+    android:orientation="vertical">
+
+    <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:id="@+id/imageView"
+            android:src="@drawable/ic_launcher"/>
+
+
+    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/ripple_label"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:gravity="fill"
+        android:background="#ff000000"
+        android:textColor="#ff8485ff"
+        android:textSize="13sp"
+        android:text="Ripple"
+        android:autoText="false" />
+
+    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/ripple_price"
+        android:layout_width="wrap_content"
+        android:layout_height="24dp"
+        android:paddingLeft="3dp"
+        android:gravity="center"
+        android:background="#ff000000"
+        android:textColor="#FFFFFF"
+        android:text="loading..."
+        android:textSize="16sp" />
+
+
+
+    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/upd_date"
+        android:layout_width="70dp"
+        android:layout_height="13dp"
+        android:paddingLeft="3dp"
+        android:gravity="center"
+        android:background="#ff000000"
+        android:textColor="#ffd0d0d0"
+        android:text=""
+        android:textSize="10sp" />
+
+
+</LinearLayout>

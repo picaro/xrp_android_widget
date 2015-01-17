@@ -1,1 +1,7 @@
+xrppricewidget
+app/build
 /.idea
+/.gradle/2.2.1/taskArtifacts
+/.gradle/2.1/taskArtifacts
+/*.iml
+/app/*.apk
