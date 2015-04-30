@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="name">Ripple</string>
+    <string name="loading">Завантаження</string>
+    <string name="app_name">Вiджет Ripple Price</string>
+</resources>

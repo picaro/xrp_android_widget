@@ -5,3 +5,5 @@ app/build
 /.gradle/2.1/taskArtifacts
 /*.iml
 /app/*.apk
+/build/intermediates/lint-cache
+/build/intermediates
