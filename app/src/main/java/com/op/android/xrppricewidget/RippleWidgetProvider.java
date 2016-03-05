@@ -27,13 +27,11 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Scanner;
 
 public class RippleWidgetProvider extends AppWidgetProvider {
 
     public static String ACTION_WIDGET_RELOAD = "reload";
     private String priceText = null;
-    private Long dateLong = null;
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
@@ -64,28 +62,39 @@ public class RippleWidgetProvider extends AppWidgetProvider {
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
             Date curDate = new Date();
 
-            Intent active = new Intent(context, RippleWidgetProvider.class);
-            active.setAction(ACTION_WIDGET_RELOAD);
-            PendingIntent actionPendingIntent = PendingIntent.getBroadcast(context, 0, active, 0);
+            PendingIntent actionPendingIntent = getPendingIntent(context);
 
-            // Register event
             views.setOnClickPendingIntent(R.id.widget_button, actionPendingIntent);
             try {
-                String widgetText = String.format("$%.4f", readXRPPriceFromJson());
-                views.setTextViewText(R.id.ripple_price, widgetText);
-                SharedPreferences.Editor edit = PreferenceManager.getDefaultSharedPreferences(context).edit();
-                edit.putString("SAVED_PRICE", widgetText).putLong("SAVED_DATE", Calendar.getInstance().getTimeInMillis()).commit();
+                tryToGetPrice(context, views);
             } catch (Exception e) {
-                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-                String priceText = preferences.getString("SAVED_PRICE", null);
-                Long dateLong = preferences.getLong("SAVED_DATE", Calendar.getInstance().getTimeInMillis());
-                curDate.setTime(dateLong);
-                views.setTextViewText(R.id.ripple_price, priceText);
+                restoreSavedPrice(context, views, curDate);
             }
 
             String date = new SimpleDateFormat("EE HH:mm").format(curDate);
             views.setTextViewText(R.id.upd_date, date);
             return views;
+        }
+
+        private void tryToGetPrice(Context context, RemoteViews views) throws IOException, JSONException {
+            String widgetText = String.format("$%.4f", readXRPPriceFromJson());
+            views.setTextViewText(R.id.ripple_price, widgetText);
+            SharedPreferences.Editor edit = PreferenceManager.getDefaultSharedPreferences(context).edit();
+            edit.putString("SAVED_PRICE", widgetText).putLong("SAVED_DATE", Calendar.getInstance().getTimeInMillis()).commit();
+        }
+
+        private void restoreSavedPrice(Context context, RemoteViews views, Date curDate) {
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+            String priceText = preferences.getString("SAVED_PRICE", null);
+            Long dateLong = preferences.getLong("SAVED_DATE", Calendar.getInstance().getTimeInMillis());
+            curDate.setTime(dateLong);
+            views.setTextViewText(R.id.ripple_price, priceText);
+        }
+
+        private PendingIntent getPendingIntent(Context context) {
+            Intent active = new Intent(context, RippleWidgetProvider.class);
+            active.setAction(ACTION_WIDGET_RELOAD);
+            return PendingIntent.getBroadcast(context, 0, active, 0);
         }
 
         private double readXRPPriceFromJson() throws IOException, JSONException {
@@ -130,7 +139,6 @@ public class RippleWidgetProvider extends AppWidgetProvider {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         if (priceText == null) {
             priceText = preferences.getString("SAVED_PRICE", null);
-            dateLong = preferences.getLong("SAVED_DATE", Calendar.getInstance().getTimeInMillis());
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
             if (priceText != null) {
                 views.setTextViewText(R.id.ripple_price, priceText);
